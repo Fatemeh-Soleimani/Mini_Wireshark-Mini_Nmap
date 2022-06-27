@@ -25,12 +25,15 @@ def main_():
     proto4 = "06"
     cs3 = "00 00"
 
-    src_ip_ = inet_aton(lines[2])  # .encode("hex")
-    for i in src_ip_:
-        src_ip = src_ip + "{:02x}".format(i)
-    dest_ip_ = inet_aton(lines[0])  # .encode("hex")
-    for i in dest_ip_:
-        dest_ip = dest_ip + "{:02x}".format(i)
+    # src_ip_ = inet_aton(lines[2])  # .encode("hex")
+    # for i in src_ip_:
+    #     src_ip = src_ip + "{:02x}".format(i)
+    # dest_ip_ = inet_aton(lines[0])  # .encode("hex")
+    # for i in dest_ip_:
+    #     dest_ip = dest_ip + "{:02x}".format(i)
+
+    src_ip_ = inet_aton(lines[2]).hex()
+    dest_ip_ = inet_aton(lines[0]).hex()
 
     src_port = "%04x" % int(lines[3])
     dest_port = "%04x" % int(lines[1])
