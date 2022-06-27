@@ -1,7 +1,9 @@
 from socket import *
 from email import message
-from binascii import unhexlify
+from binascii import *
 from checksum3 import *
+from pkt_sender import *
+from sys import *
 
 
 fd = open("info.txt", 'r')
@@ -39,6 +41,7 @@ interface0 = lines[4].strip()
 # checksum ip
 ipcs = ""
 ipcs += ver
+# header length   ??????????????
 ipcs += diff
 ipcs += t_len
 ipcs += id
@@ -95,3 +98,7 @@ pkt += h_len
 pkt += w_size
 pkt += cs4
 pkt += up
+
+
+print("packet sent with %d byte on wlan0 " % sendpkt(pkt, interface0))
+
