@@ -12,18 +12,18 @@ def myfunc():
 
     dest_mac = lines[6][:17]
     src_mac = lines[5][:17]
-    proto3 = "08 00"
+    proto3 = "0800"
 
     ver = "45"
     # head len
     # fragment offset
     diff = "00"
-    t_len = "00 28"
-    id = "07 c3"
-    flags = "40 00"
+    t_len = "0028"
+    id = "07c3"
+    flags = "4000"
     ttl = "40"
     proto4 = "06"
-    cs3 = "00 00"
+    cs3 = "0000"
 
     # src_ip_ = inet_aton(lines[2])  # .encode("hex")
     # for i in src_ip_:
@@ -37,13 +37,13 @@ def myfunc():
 
     src_port = "%04x" % int(lines[3])
     dest_port = "%04x" % int(lines[1])
-    seq_num = "17 40 30 d1"
-    ack = "00 00 00 00"
+    seq_num = 'c039a735'
+    ack = "00000000"
     # hlen + flags
-    h_len = "50 02"
-    w_size = "72 10"
-    cs4 = "00 00"
-    up = "00 00"
+    h_len = "5002"
+    w_size = "7210"
+    cs4 = "0000"
+    up = "0000"
 
     interface0 = lines[4].strip()
 
@@ -60,9 +60,19 @@ def myfunc():
     ipcs += cs3
     ipcs += src_ip
     ipcs += dest_ip
+    #ip payload
 
     # checksum tcp
     tcpcs = ""
+   
+    # tcp pseudo header
+    reserved = "00"
+    tcpcs += src_ip
+    tcpcs += dest_ip
+    tcpcs += reserved
+    tcpcs += proto4
+    tcpcs += '0014'
+
     tcpcs += src_port
     tcpcs += dest_port
     tcpcs += seq_num
@@ -71,14 +81,6 @@ def myfunc():
     tcpcs += w_size
     tcpcs += cs4
     tcpcs += up
-    # tcp pseudo header
-    reserved = "00"
-    tcpcs += src_ip
-    tcpcs += dest_ip
-    tcpcs += reserved
-    tcpcs += proto4
-    tcpcs += h_len
-
     # update checksum
     cs3 = cs(ipcs)
     cs4 = cs(tcpcs)
