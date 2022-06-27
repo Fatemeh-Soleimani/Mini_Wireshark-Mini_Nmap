@@ -31,4 +31,4 @@ for i in range(x[0], x[1]):
     a_file.writelines(list_of_lines)
     a_file.close()
 
-    main_()
+    myfunc()

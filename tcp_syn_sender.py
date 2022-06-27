@@ -6,7 +6,7 @@ from pkt_sender import *
 from sys import *
 
 
-def main_():
+def myfunc():
     fd = open("info.txt", 'r')
     lines = fd.readlines()
 
@@ -32,8 +32,8 @@ def main_():
     # for i in dest_ip_:
     #     dest_ip = dest_ip + "{:02x}".format(i)
 
-    src_ip_ = inet_aton(lines[2]).hex()
-    dest_ip_ = inet_aton(lines[0]).hex()
+    src_ip = inet_aton(lines[2]).hex()
+    dest_ip = inet_aton(lines[0]).hex()
 
     src_port = "%04x" % int(lines[3])
     dest_port = "%04x" % int(lines[1])
@@ -110,4 +110,4 @@ def main_():
     print("packet sent with %d byte on wlan0 " % sendpkt(pkt, interface0))
 
 
-main_()
+myfunc()
