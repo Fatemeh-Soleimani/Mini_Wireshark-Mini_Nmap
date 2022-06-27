@@ -1,11 +1,11 @@
 from socket import *
 from struct import unpack
-
+import re
 
 def ether(data):
     dest_mac, src_mac, proto = unpack('!6s 6s H', data[:14])
-    dest_mac = ':'.join(re.findall('..', dest_mac.encode('hex')))
-    src_mac = ':'.join(re.findall('..', src_mac.encode('hex')))
+    dest_mac = ':'.join(re.findall('..', dest_mac.hex()))
+    src_mac = ':'.join(re.findall('..', src_mac.hex()))
     return[dest_mac, src_mac, hex(proto), data[14:]]
 
 
@@ -14,15 +14,15 @@ def ip(data):
     data = unpack('! B s H 2s 2s B B 2s 4s 4s', data[:20])
     return [data[0] >> 4  # version
             , (data[0] & (0x0F))*4,  # header length
-            "0X"+data[1].encode('hex'),  # diffserv
+            "0X"+data[1].hex(),  # diffserv
             data[2],  # total length
-            "0x"+data[3].encode('hex'),  # ID
-            "0x"+data[4].encode('hex'),  # flags
+            "0x"+data[3].hex(), # ID
+            "0x"+data[4].hex(),  # flags
             data[5],  # ttl
             data[6],  # protocol
-            "0x"+data[7].encode('hex'),  # checksum
-            socket.inet_ntoa(data[8]),  # source ip
-            socket.inet_ntoa(data[9]),  # destination ip
+            "0x"+data[7].hex(),  # checksum
+            inet_ntoa(data[8]),  # source ip
+            inet_ntoa(data[9]),  # destination ip
             maindata[(data[0] & (0x0F))*4:]]  # ip payload
 
 
@@ -69,5 +69,5 @@ while True:
         ip_shark = ip(ether_shark[3])
         if(ip_shark[6] == "0x060"):
             tcp_shark = TCP(ip_shark[3], 20)
-            if(tcp_shark[4] == 1 and tcp_shark[5] == 1)
-            print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
+            if(tcp_shark[4] == 1 and tcp_shark[5] == 1):
+                print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
