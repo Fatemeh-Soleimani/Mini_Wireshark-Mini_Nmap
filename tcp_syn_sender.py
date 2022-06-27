@@ -39,6 +39,7 @@ def myfunc():
     dest_port = "%04x" % int(lines[1])
     seq_num = "17 40 30 d1"
     ack = "00 00 00 00"
+    # hlen + flags
     h_len = "50 02"
     w_size = "72 10"
     cs4 = "00 00"

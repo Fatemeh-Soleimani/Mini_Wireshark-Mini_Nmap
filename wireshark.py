@@ -39,25 +39,26 @@ def ip(data):
 #             "0x"+data[8].encode('hex')]   #up
 
 def TCP(data, data_length):
-    #????
-    data = unpack("!2H2I4H", data[:20])
-    return [data[0],
-    data[1],
-    data[2],
-    data[3],
-    data[4] >> 12,
-    data[data_offset*4:data_length],
-    (data[4] >> 6) & 0x03ff , # MUST BE ZERO
-    # ata[4] & 0x003f,
-    # flags & 0x0020,
-    # flags & 0x0010,
-    # flags & 0x0008,
-    # flags & 0x0004,
-    # flags & 0x0002,
-    # flags & 0x0001,
-    data[5],
-    data[6],
-    data[7]]
+    data = unpack("!H H L L H H H H", data[:20])
+    return [data[0],  # source port
+            data[1],  # dest port
+            data[2],  # seq num
+            data[3],  # ack
+            data[4] & 0x0002,  # syn flag
+            data[4] & 0x0004,  # ack flag
+            #data[4] >> 12,
+            # data[data_offset*4:data_length],
+            # (data[4] >> 6) & 0x03ff , # MUST BE ZERO
+            # ata[4] & 0x003f,
+            # flags & 0x0020,
+            # flags & 0x0010,
+            # flags & 0x0008,
+            # flags & 0x0004,
+            # flags & 0x0002,
+            # flags & 0x0001,
+            data[5],  # window size
+            data[6],  # check sum
+            data[7]]  # urgegnt pointer
 
 
 conn = socket(AF_PACKET, SOCK_RAW, ntohs(0x0003))
@@ -66,5 +67,7 @@ while True:
     ether_shark = ether(raw_dat)
     if(ether_shark[2] == "0x800"):
         ip_shark = ip(ether_shark[3])
-        if(ip_shark[2] == "0x060"):
+        if(ip_shark[6] == "0x060"):
             tcp_shark = TCP(ip_shark[3], 20)
+            if(tcp_shark[4] == 1 and tcp_shark[5] == 1)
+            print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
