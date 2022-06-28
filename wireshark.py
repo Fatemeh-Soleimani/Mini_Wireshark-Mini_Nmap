@@ -36,8 +36,8 @@ def TCP(data):
             data[1],  # dest port
             data[2],  # seq num
             data[3],  # ack
-            data[4] & 0x0002,  # syn flag
-            data[4] & 0x0010,  # ack flag
+            data[4] & (1<<1),  # syn flag
+            data[4] & (1<<4),  # ack flag
             data[5],  # window size
             data[6],  # check sum
             data[7]]  # urgegnt pointer
@@ -52,7 +52,6 @@ while True:
         ip_shark = ip(ether_shark[3])
         if(ip_shark[7] == 6):
             tcp_shark = TCP(ip_shark[11])
-            #if(tcp_shark[0]==myport):
-            print(f"3:{tcp_shark[4]}       {tcp_shark[5]}")
-            if(tcp_shark[4] == 2 and tcp_shark[5] == 16):
-                print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
+            if(tcp_shark[1]==myport):
+                if(tcp_shark[4] == 2 and tcp_shark[5] == 16):
+                    print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
