@@ -2,6 +2,7 @@ from socket import *
 from struct import unpack
 import re
 
+myport=3000
 
 def ether(data):
     dest_mac, src_mac, proto = unpack('!6s 6s H', data[:14])
@@ -27,14 +28,16 @@ def ip(data):
             maindata[(data[0] & (0x0F))*4:]]  # ip payload
 
 
-def TCP(data, data_length):
+def TCP(data):
+
+    
     data = unpack("!H H L L H H H H", data[:20])
     return [data[0],  # source port
             data[1],  # dest port
             data[2],  # seq num
             data[3],  # ack
             data[4] & 0x0002,  # syn flag
-            data[4] & 0x0004,  # ack flag
+            data[4] & 0x0010,  # ack flag
             data[5],  # window size
             data[6],  # check sum
             data[7]]  # urgegnt pointer
@@ -44,9 +47,12 @@ conn = socket(AF_PACKET, SOCK_RAW, ntohs(0x0003))
 while True:
     raw_dat, add = conn.recvfrom(65535)
     ether_shark = ether(raw_dat)
+
     if(ether_shark[2] == "0x800"):
         ip_shark = ip(ether_shark[3])
-        if(ip_shark[6] == "0x060"):
-            tcp_shark = TCP(ip_shark[3], 20)
-            if(tcp_shark[4] == 0x0002 and tcp_shark[5] == 0x0004):
+        if(ip_shark[7] == 6):
+            tcp_shark = TCP(ip_shark[11])
+            #if(tcp_shark[0]==myport):
+            print(f"3:{tcp_shark[4]}       {tcp_shark[5]}")
+            if(tcp_shark[4] == 2 and tcp_shark[5] == 16):
                 print(f"port {tcp_shark[0]} is open on {ip_shark[9]}")
