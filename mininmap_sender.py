@@ -1,4 +1,7 @@
-from tcp_syn_sender import *
+from tcp_syn_sender import myfunc
+
+
+
 
 ip = input("what is the terget ip address?")
 ports = input("which ports do you want to scan?")
@@ -19,7 +22,7 @@ a_file.close()
 
 temp = ""
 
-for i in range(x[0], x[1]):
+for i in range(int(x[0]), int(x[1])):
     # change port in info.txt file
     a_file = open("info.txt", "r")
     list_of_lines = a_file.readlines()
@@ -30,5 +33,5 @@ for i in range(x[0], x[1]):
     a_file = open("info.txt", "w")
     a_file.writelines(list_of_lines)
     a_file.close()
-
+    print(f"port {i} : ", end="")
     myfunc()
