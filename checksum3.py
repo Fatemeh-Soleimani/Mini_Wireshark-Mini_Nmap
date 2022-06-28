@@ -17,11 +17,13 @@ def header_checksum(header, size):
 
     return (~cksum) & 0xFFFF
 
+
 def cs(data):
-    data = data.split()
-    data = [int(item,16) for item in data]
-    return  "%04x" % (header_checksum(data, len(data)),)
+    data = data.replace(' ', '')
+    data = [data[i:i+2] for i in range(0, len(data), 2)]
+    data = [int(item, 16) for item in data]
+    return "%04x" % (header_checksum(data, len(data)),)
 
 
 #a="c0 aa 30 72 5d b8 d8 22 00 06 00 14 bb b8 00 50 17 49 30 d1 00 00 00 00 50 02 72 10 00 00 00 00"
-#print(cs(a))
+# print(cs(a))
