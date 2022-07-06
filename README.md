@@ -1,4 +1,4 @@
-# Mini_Wireshark-
+# Mini_Wireshark/Mini_Nmap
 second project of network lesson, semester 4
 
 
